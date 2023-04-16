@@ -62,11 +62,17 @@ int main(int argc, char *args[])
             _exit(1);
         }
         char *trimline = trim(line);
+
+        if(trimline[0] == '\0')
+        {
+            continue;
+        }
+
         if(strcmp(trimline, "exit") == 0)
         {
             break;
         }
-        
+
         char *cmd = strtok(line, " \t");
 
         while(cmd != NULL)
