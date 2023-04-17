@@ -8,12 +8,16 @@ if len(sys.argv) == 2:
 else:
     prompt = "jsh: "
 
+print(sys.argv)
 print(prompt, end='', flush=True)
 for line in sys.stdin:
     line = line.strip('\n')
+    if not line:
+        print(prompt, end='', flush=True)
+        continue
     if line == "exit":
         sys.exit(0)
     line = line.replace('\t', ' ')
-    words = line.split()
-    print(*words, sep='\n')
+    args = line.split()
+    print(*args, sep='\n')
     print(prompt, end='', flush=True)
