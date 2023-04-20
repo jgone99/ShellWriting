@@ -28,7 +28,6 @@ char *trim(char *line) {
 
 typedef struct args_info
 {
-    char *delim;
     char **args;
     int arg_count;
     int background_run;
@@ -36,6 +35,7 @@ typedef struct args_info
 
 void parse_args(args_info **arg_info, char *line)
 {
+    char *delim = " \t";
     int arg_count = 0;
     char *ptr = line;
     int traversing_delim = 0;
@@ -44,9 +44,9 @@ void parse_args(args_info **arg_info, char *line)
     while(*ptr)
     {
         int in_delim = 0;
-        for(int i = 0; i < strlen((*arg_info)->delim); i++)
+        for(int i = 0; i < strlen(delim); i++)
         {
-            in_delim += *ptr == (*arg_info)->delim[i];
+            in_delim += *ptr == delim[i];
         }
         arg_count += !in_delim && traversing_delim;
         traversing_delim = in_delim;
@@ -58,13 +58,13 @@ void parse_args(args_info **arg_info, char *line)
     (*arg_info)->args = malloc((arg_count + 1) * sizeof(char*));
     (*arg_info)->args[arg_count] = NULL;
 
-    char *next_arg = strtok(line, (*arg_info)->delim);
+    char *next_arg = strtok(line, delim);
 
     int i = 0;
     while(next_arg)
     {
         (*arg_info)->args[i++] = next_arg;
-        next_arg = strtok(NULL, (*arg_info)->delim);
+        next_arg = strtok(NULL, delim);
     }
     
     if((*arg_info)->background_run = (*arg_info)->args[arg_count - 1][strlen((*arg_info)->args[arg_count - 1]) - 1] == '&')
@@ -79,7 +79,6 @@ int main(int argc, char *args[])
     size_t size = 0; 
     char *prompt = NULL;
     args_info *arg_info = malloc(sizeof(args_info));
-    arg_info->delim = " \t";
 
     if(argc == 1)
     {
